@@ -1,0 +1,11 @@
+<table> 
+    <tr>
+        <th>Department name</th><th>Average salary</th><th>Number of employees</th>
+    </tr>
+    {% for department in departments %}
+    <tr>
+        <td>{{ department.name }}</td><td>{{ department.average_monthly_salary }}</td>
+        <td>{{ department.employees_count }}</td>
+    </tr>
+    {% endfor %}
+</table>
