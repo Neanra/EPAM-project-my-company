@@ -1,0 +1,10 @@
+{% extends "base.html.jinja" %}
+{% block title %}Confirmation page{% endblock %}
+{% block body %}
+<h3 style="color:darkred;">Are you sure you want to delete {{ employee.full_name }} record?</h3>
+<br/>
+<form method="POST">
+<button type="submit" class="button">Yes</button>
+<a href="/employees/{{ employee.id }}" class="button">No</a>
+</form>
+{% endblock %}

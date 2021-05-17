@@ -1,0 +1,22 @@
+{% extends "base.html.jinja" %}
+{% block title %}{{ employee.full_name }}{% endblock %}
+{% block body %}
+<table> 
+    <tr>
+        <th colspan="3">Employee info</th>
+    </tr>
+    <tr>
+        <th>Name</th><th>Date of birth</th><th>Salary</th><th>Department</th>
+    </tr>
+    <tr>
+        <td>{{ employee.full_name }}</td>
+        <td>{{ employee.date_of_birth }}</td>
+        <td>{{ employee.monthly_salary }}</td>
+        <td><a href="/departments/{{ employee.department_id }}">{{ employee.department.name }}</a></td>
+    </tr>
+</table>
+
+<a href="/employees/{{ employee.id }}/edit" class="button">Edit employee record</a>
+<a href="/employees/{{ employee.id }}/delete" class="button">Delete employee record</a>
+{% endblock %}
+

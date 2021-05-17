@@ -1,5 +1,5 @@
 {% extends "base.html.jinja" %}
-{% block title %}Departments{% endblock %}
+{% block title %}Confirmation page{% endblock %}
 {% block body %}
 <h3 style="color:darkred;">Are you sure you want to delete {{ department.name }} department? <br/>
 {%if department.employees|length > 0 %}
