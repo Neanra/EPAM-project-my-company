@@ -1,5 +1,6 @@
 from department_app import db
 from decimal import Decimal
+from datetime import date
 
 class Department(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -20,6 +21,15 @@ class Department(db.Model):
     def __repr__(self):
         return '<Department {}>'.format(self.name)
 
+    def to_dict(self):
+        return {'id': str(self.id), 'name': self.name if self.name else ''}
+
+    def populate_from_dict(self, d):
+        if len(d['name']) < 1:
+            raise ValueError("Name must not be empty")
+        self.name = d['name']
+
+
 class Employee(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(80), nullable=False)
@@ -33,3 +43,43 @@ class Employee(db.Model):
     def __repr__(self):
         return '<Employee {}>'.format(self.full_name)
 
+    def to_dict(self):
+        return {'id': str(self.id), 
+                'first_name': self.first_name if self.first_name else '', 
+                'last_name': self.last_name if self.last_name else '',
+                'date_of_birth': self.date_of_birth.isoformat() if self.date_of_birth else '', 
+                'monthly_salary': str(self.monthly_salary) if self.monthly_salary is not None else '',
+                'department_id': str(self.department_id) if self.department_id is not None else ''}
+
+    def populate_from_dict(self, d):
+
+        if 'first_name' in d and len(d['first_name']) < 1:
+            raise ValueError("First name must not be empty")
+        if 'last_name' in d and len(d['last_name']) < 1:
+            raise ValueError("Last name must not be empty")
+        try:
+            date_of_birth = date.fromisoformat(d['date_of_birth'])
+        except ValueError:
+            raise ValueError("Date format is invalid. Should be YYYY-MM-DD")
+        except KeyError:
+            date_of_birth = self.date_of_birth
+        if date_of_birth >= date.today() or date_of_birth < date.fromisoformat('1900-01-01'):
+            raise ValueError("Date is not in range between 1900-01-01 and today")
+        try:
+            salary = Decimal(d['monthly_salary'])
+        except ValueError:
+            raise ValueError("Salary must a decimal number")
+        except KeyError:
+            salary = self.monthly_salary
+        try:
+            id = int(d['department_id'])
+        except ValueError:
+            raise ValueError("Department is not valid")
+        except KeyError:
+            id = self.department_id
+
+        self.first_name = d.get('first_name', self.first_name)
+        self.last_name = d.get('last_name', self.last_name)
+        self.date_of_birth = date_of_birth
+        self.monthly_salary = salary
+        self.department_id = id

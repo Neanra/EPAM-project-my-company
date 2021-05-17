@@ -1,0 +1,11 @@
+{% extends "base.html.jinja" %}
+{% block title %}Edit {{ department.name }} department{% endblock %}
+{% block body %}
+ <form method="POST">
+  <label for="name">Department name:</label><br/>
+  <input type="text" id="name" name="name" value="{{ form.get('name', '') }}"><br/><br/>
+  <button type="submit" class="button">Submit</button>
+  <a href="/departments/{{ department.id }}" class="button">Cancel</a>
+
+</form> 
+{% endblock %}

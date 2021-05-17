@@ -2,6 +2,7 @@ from decimal import Decimal
 from flask import Flask, render_template, request, abort, redirect, flash
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
+from datetime import date
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
@@ -15,6 +16,10 @@ def create_app():
     app.config["SECRET_KEY"] = "g5g5h4jytj65j56j"
     bootstrap.init_app(app)
     db.init_app(app)
+
+    @app.route("/")
+    def index():
+        return redirect("/departments")
 
     @app.route("/departments")
     def departments():
@@ -52,6 +57,29 @@ def create_app():
             assert request.method == "GET"
             return render_template("delete_department.html.jinja", department=department)
 
+    @app.route("/departments/new/edit", methods=["GET", "POST"])
+    @app.route("/departments/<int:id>/edit", methods=["GET", "POST"])
+    def edit_department(id=None):
+        department = Department() if id is None else Department.query.get(id)
+        response_code = 200
+        if not department:
+            return "Department not found", 404
+        if request.method == "POST":
+            try:
+                department.populate_from_dict(request.form)
+                db.session.add(department)
+                db.session.commit()
+                return redirect("/departments/{}".format(department.id))
+            except ValueError as e:
+                flash(str(e))
+                response_code = 400
+            except:
+                flash("Database insertion failed!")
+                db.session.rollback()
+                response_code = 400
+        return render_template("edit_department.html.jinja", department=department, 
+                                form=department.to_dict()), response_code
+
     @app.route("/employees")
     def employees():
         employees = Employee.query.all()
@@ -82,5 +110,30 @@ def create_app():
         else:
             assert request.method == "GET"
             return render_template("delete_employee.html.jinja", employee=employee)
+
+    @app.route("/employees/new/edit", methods=["GET", "POST"])
+    @app.route("/employees/<int:id>/edit", methods=["GET", "POST"])
+    def edit_employee(id=None):
+        employee = Employee() if id is None else Employee.query.get(id)
+        departments = Department.query.all()
+        today = date.today().isoformat()
+        response_code = 200
+        if not employee:
+            return "Employee not found", 404
+        if request.method == "POST":
+            try:
+                employee.populate_from_dict(request.form)
+                db.session.add(employee)
+                db.session.commit()
+                return redirect("/employees/{}".format(employee.id))
+            except ValueError as e:
+                flash(str(e))
+                response_code = 400
+            except:
+                flash("Database insertion failed!")
+                db.session.rollback()
+                response_code = 400
+        return render_template("edit_employee.html.jinja", employee=employee, 
+                            departments=departments, today=today, form=employee.to_dict()), response_code
 
     return app 
