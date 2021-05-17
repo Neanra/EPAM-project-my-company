@@ -1,11 +1,16 @@
+{% extends "base.html.jinja" %}
+{% block title %}Departments{% endblock %}
+{% block body %}
 <table> 
     <tr>
         <th>Department name</th><th>Average salary</th><th>Number of employees</th>
     </tr>
     {% for department in departments %}
     <tr>
-        <td>{{ department.name }}</td><td>{{ department.average_monthly_salary }}</td>
+        <td><a href="/departments/{{ department.id }}">{{ department.name }}</a></td>
+        <td>{{ department.average_monthly_salary }}</td>
         <td>{{ department.employees_count }}</td>
     </tr>
     {% endfor %}
 </table>
+{% endblock %}

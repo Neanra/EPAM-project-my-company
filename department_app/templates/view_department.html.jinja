@@ -1,3 +1,6 @@
+{% extends "base.html.jinja" %}
+{% block title %}{{ department.names }} department{% endblock %}
+{% block body %}
 <table> 
     <tr>
         <th colspan="3">Department info</th>
@@ -12,7 +15,10 @@
     </tr>
 </table>
 
-<br/>
+<a href="/departments/{{ department.id }}/edit" class="button">Edit department</a>
+<a href="/departments/{{ department.id }}/delete" class="button">Delete department</a>
+
+<br/><br/><br/>
 
 {% set employees = department.employees %}
 <table> 
@@ -24,10 +30,11 @@
     </tr>
     {% for employee in employees|sort(attribute='full_name') %}
     <tr>
-        <td>{{ employee.full_name }}</td>
+        <td><a href="/employees/{{ employee.id }}">{{ employee.full_name }}</a></td>
         <td>{{ employee.date_of_birth }}</td>
         <td>{{ employee.monthly_salary }}</td>
     </tr>
     {% endfor %}
 </table>
+{% endblock %}
 

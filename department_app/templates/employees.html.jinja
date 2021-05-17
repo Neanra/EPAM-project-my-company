@@ -1,13 +1,17 @@
+{% extends "base.html.jinja" %}
+{% block title %}Employees{% endblock %}
+{% block body %}
 <table> 
     <tr>
         <th>Name</th><th>Date of birth</th><th>Salary</th><th>Department</th>
     </tr>
     {% for employee in employees %}
     <tr>
-        <td>{{ employee.full_name }}</td>
+        <td><a href="/employees/{{ employee.id }}">{{ employee.full_name }}</a></td>
         <td>{{ employee.date_of_birth }}</td>
         <td>{{ employee.monthly_salary }}</td>
-        <td>{{ employee.department.name }}</td>
+        <td><a href="/departments/{{ employee.department_id }}">{{ employee.department.name }}</a></td>
     </tr>
     {% endfor %}
 </table>
+{% endblock %}

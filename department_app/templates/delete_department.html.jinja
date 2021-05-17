@@ -1,0 +1,18 @@
+{% extends "base.html.jinja" %}
+{% block title %}Departments{% endblock %}
+{% block body %}
+<h3 style="color:darkred;">Are you sure you want to delete {{ department.name }} department? <br/>
+{%if department.employees|length > 0 %}
+    {%if department.employees|length == 1 %}
+    This will remove 1 employee currently in this department!
+    {% else %}
+    This will remove all {{ department.employees|length }} employees currently in this department!
+    {% endif %}
+{% endif %}
+</h3>
+<br/>
+<form method="POST">
+<button type="submit" class="button">Yes</button>
+<a href="/departments/{{ department.id }}" class="button">No</a>
+</form>
+{% endblock %}
