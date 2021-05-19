@@ -1,30 +1,29 @@
 {% extends "base.html.jinja" %}
 {% block title %}Edit {{ employee.name }} record{% endblock %}
-datePickerId.max = new Date().toISOString().split("T")[0];
 {% block body %}
 <form method="POST">
-  <label for="first_name">First name:</label><br/>
-  <input type="text" id="first_name" name="first_name" value="{{ form.get('first_name', '') }}" required><br/>
-  <label for="last_name">Last name:</label><br/>
-  <input type="text" id="last_name" name="last_name" value="{{ form.get('last_name', '') }}" required><br/>
-  <label for="date_of_birth">Birthday:</label><br/>
-  <input type="date" name="date_of_birth" id="date_of_birth" value="{{ form.get('date_of_birth', '') }}"
-        max="{{ today }}" min="1900-01-01" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" required><br/>
-  <label for="monthly_salary">Salary:</label><br/>
-  <input type="number" name="monthly_salary" id="monthly_salary" step="0.01" min="0" 
-          value="{{ form.get('monthly_salary', '') }}" required><br/>
-  <label for="department_id">Department:</label><br/>
-  <select name="department_id" id="department_id" required>
-    <option disabled {% if form.get('department_id', '') == '' %} selected {% endif %} value>
-    -- select an option -- </option>
-    {% for department in departments %}
-    <option value="{{ department.id }}" {% if form.get('department_id', '') == department.id|string %} selected {% endif %}>
-    {{ department.name }}</option>
-    {% endfor %}
-  </select><br/>
-  <br/>
+    <label for="first_name">First name:</label><br/>
+    <input type="text" id="first_name" name="first_name" value="{{ form.get('first_name', '') }}" required><br/>
+    <label for="last_name">Last name:</label><br/>
+    <input type="text" id="last_name" name="last_name" value="{{ form.get('last_name', '') }}" required><br/>
+    <label for="date_of_birth">Birthday:</label><br/>
+    <input type="date" name="date_of_birth" id="date_of_birth" value="{{ form.get('date_of_birth', '') }}"
+          max="{{ today }}" min="1900-01-01" pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" required><br/>
+    <label for="monthly_salary">Salary:</label><br/>
+    <input type="number" name="monthly_salary" id="monthly_salary" step="0.01" min="0" 
+            value="{{ form.get('monthly_salary', '') }}" required><br/>
+    <label for="department_id">Department:</label><br/>
+    <select name="department_id" id="department_id" required>
+        <option disabled {% if form.get('department_id', '') == '' %} selected {% endif %} value>
+        -- select an option -- </option>
+        {% for department in departments %}
+        <option value="{{ department.id }}" {% if form.get('department_id', '') == department.id|string %} selected {% endif %}>
+        {{ department.name }}</option>
+        {% endfor %}
+    </select><br/>
+    <br/>
 
-  <button type="submit" class="button">Submit</button>
-  <a href="/employees/{{ employee.id }}" class="button">Cancel</a>
+    <button type="submit" class="button">Submit</button>
+    <a href={% if employee.id %}"/employees/{{ employee.id }}"{% else %}"/employees"{% endif %} class="button">Cancel</a>
 </form>
 {% endblock %}

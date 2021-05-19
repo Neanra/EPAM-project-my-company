@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, abort, redirect, flash
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date
+from sqlalchemy import and_
 
 bootstrap = Bootstrap()
 db = SQLAlchemy()
@@ -20,6 +21,11 @@ def create_app():
     @app.route("/")
     def index():
         return redirect("/departments")
+
+    @app.route("/search")
+    def search():
+        today = date.today().isoformat()
+        return render_template("search.html.jinja", today=today)
 
     @app.route("/departments")
     def departments():
@@ -82,7 +88,14 @@ def create_app():
 
     @app.route("/employees")
     def employees():
+        from_date = request.args.get("from_date", default=None)
+        to_date = request.args.get("to_date", default=None)
         employees = Employee.query.all()
+        if from_date and to_date:
+            employees = Employee.query.filter(and_(Employee.date_of_birth >= date.fromisoformat(from_date),\
+            Employee.date_of_birth <= date.fromisoformat(to_date))).all()
+        else:
+            employees = Employee.query.all()
         employees.sort(key=lambda x: x.full_name)
         return render_template("employees.html.jinja", employees=employees)
 
