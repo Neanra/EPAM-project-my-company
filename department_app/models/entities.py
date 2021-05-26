@@ -1,5 +1,5 @@
 from department_app import db
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from datetime import date
 
 class Department(db.Model):
@@ -31,9 +31,12 @@ class Department(db.Model):
                 'employees_count': self.employees_count}
 
     def populate_from_dict(self, d):
-        if len(d['name']) < 1:
-            raise ValueError("Name must not be empty")
-        self.name = d['name']
+        if 'name' in d:
+            if not isinstance(d['name'], str):
+                raise TypeError("Name must be a string")
+            if len(d['name']) < 1:
+                raise ValueError("Name must not be empty")
+            self.name = d['name']
 
 
 class Employee(db.Model):
@@ -70,18 +73,19 @@ class Employee(db.Model):
             raise ValueError("First name must not be empty")
         if 'last_name' in d and len(d['last_name']) < 1:
             raise ValueError("Last name must not be empty")
-        try:
-            date_of_birth = date.fromisoformat(d['date_of_birth'])
-        except ValueError:
-            raise ValueError("Date format is invalid. Should be YYYY-MM-DD")
-        except KeyError:
+        if 'date_of_birth' in d:
+            try:
+                date_of_birth = date.fromisoformat(d['date_of_birth'])
+            except ValueError:
+                raise ValueError("Date format is invalid. Should be YYYY-MM-DD")
+            if date_of_birth >= date.today() or date_of_birth < date.fromisoformat('1900-01-01'):
+                raise ValueError("Date is not in range between 1900-01-01 and today")
+        else:
             date_of_birth = self.date_of_birth
-        if date_of_birth >= date.today() or date_of_birth < date.fromisoformat('1900-01-01'):
-            raise ValueError("Date is not in range between 1900-01-01 and today")
         try:
             salary = Decimal(d['monthly_salary'])
-        except ValueError:
-            raise ValueError("Salary must a decimal number")
+        except (ValueError, InvalidOperation):
+            raise ValueError("Salary must be a decimal number")
         except KeyError:
             salary = self.monthly_salary
         try:
@@ -90,7 +94,6 @@ class Employee(db.Model):
             raise ValueError("Department is not valid")
         except KeyError:
             id = self.department_id
-
         self.first_name = d.get('first_name', self.first_name)
         self.last_name = d.get('last_name', self.last_name)
         self.date_of_birth = date_of_birth

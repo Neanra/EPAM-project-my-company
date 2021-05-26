@@ -170,6 +170,27 @@ def create_app():
             return jsonify({"error":"Department not found"}), 404
         return jsonify({"content": department.to_api_dict(), 
                         "links": {"self": "/api/departments/{}".format(department.id)}})
+    
+    @app.route("/api/departments/<int:id>", methods=["PUT"])
+    @app.route("/api/departments", methods=["POST"])
+    def edit_department_api(id=None):
+        department = Department() if id is None else Department.query.get(id)
+        if not department:
+            return jsonify({"error":"Department not found"}), 404
+        try:
+            request_dict = request.get_json(force=True)
+            if request_dict is None:
+                return jsonify({"error":"Invalid json"}), 400
+            department.populate_from_dict(request_dict)
+            db.session.add(department)
+            db.session.commit()
+            return jsonify({"content": department.to_api_dict(), 
+                        "links": {"self": "/api/departments/{}".format(department.id)}})
+        except (ValueError, TypeError) as e:
+            return jsonify({"error":str(e)}), 400
+        except:
+            db.session.rollback()
+            return jsonify({"error":"Database insertion failed!"}), 400
 
     @app.route("/api/employees")
     def employees_api():
@@ -190,5 +211,55 @@ def create_app():
         return jsonify({"content": employee.to_api_dict(),
                         "links": {"self": "/api/employees/{}".format(employee.id),
                                   "department": "/api/departments/{}".format(employee.department_id)}})
+
+    @app.route("/api/employees/<int:id>", methods=["PUT"])
+    @app.route("/api/employees", methods=["POST"])
+    def edit_employee_api(id=None):
+        employee = Employee() if id is None else Employee.query.get(id)
+        if not employee:
+            return jsonify({"error":"Employee not found"}), 404
+        try:
+            request_dict = request.get_json(force=True)
+            if request_dict is None:
+                return jsonify({"error":"Invalid json"}), 400
+            employee.populate_from_dict(request_dict)
+            db.session.add(employee)
+            db.session.commit()
+            return jsonify({"content": employee.to_api_dict(), 
+                            "links": {"self": "/api/employees/{}".format(employee.id), 
+                            "department": "/api/departments/{}".format(employee.department_id)}})
+        except (ValueError, TypeError) as e:
+            return jsonify({"error":str(e)}), 400
+        except:
+            db.session.rollback()
+            return jsonify({"error":"Database insertion failed!"}), 400    
+
+    @app.route("/api/employees/<int:id>", methods=["DELETE"])
+    def delete_employee_api(id):
+        employee = Employee.query.get(id)
+        if not employee:
+            return jsonify({"error":"Employee not found"}), 404
+        try:
+            db.session.delete(employee)
+            db.session.commit()
+            return jsonify({})
+        except:
+            db.session.rollback()
+            return jsonify({"error":"Employee record not deleted!"}), 400
+
+    @app.route("/api/departments/<int:id>", methods=["DELETE"])
+    def delete_department_api(id):
+        department = Department.query.get(id)
+        if not department:
+            return jsonify({"error":"Department not found"}), 404
+        try:
+            for employee in department.employees:
+                db.session.delete(employee)
+            db.session.delete(department)
+            db.session.commit()
+            return jsonify({})
+        except:
+            db.session.rollback()
+            return jsonify({"error":"Department record not deleted!"}), 400
 
     return app 
