@@ -1,3 +1,10 @@
+"""
+@author: Julia Issajeva
+
+This package is a flask web service and application that allows to create and maintain
+records for departments and employees of a company.
+"""
+
 from decimal import Decimal
 from flask import Flask, render_template, request, abort, redirect, flash, jsonify
 from flask_bootstrap import Bootstrap
@@ -11,6 +18,11 @@ db = SQLAlchemy()
 from .models.entities import Department, Employee
 
 def create_app():
+    """
+    Initializes and returns flask application instance for department app.
+    
+    Returns: Flask application instance.
+    """
     app = Flask(__name__)
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://department_app:sleep42@localhost/department_app"
@@ -20,21 +32,25 @@ def create_app():
 
     @app.route("/")
     def index():
+        """Redirects user to departments listing page."""
         return redirect("/departments")
 
     @app.route("/search")
     def search():
+        """Displays employee search form."""
         today = date.today().isoformat()
         return render_template("search.html.jinja", today=today)
 
     @app.route("/departments")
     def departments():
+        """Displays departments list."""
         departments = Department.query.all()
         departments.sort(key=lambda x: x.average_monthly_salary if x.average_monthly_salary else -1, reverse=True)
         return render_template("departments.html.jinja", departments=departments)
 
     @app.route("/departments/<int:id>")
     def view_department(id):
+        """Displays department."""
         department = Department.query.get(id)
         if not department:
             return "Department not found", 404
@@ -42,6 +58,7 @@ def create_app():
 
     @app.route("/departments/<int:id>/delete", methods=["GET","POST"])
     def delete_department(id):
+        """Deletes department by id."""
         department = Department.query.get(id)
         if not department:
             return "Department not found", 404
@@ -66,6 +83,7 @@ def create_app():
     @app.route("/departments/new/edit", methods=["GET", "POST"])
     @app.route("/departments/<int:id>/edit", methods=["GET", "POST"])
     def edit_department(id=None):
+        """Displays and processes edit department form for new or existing department."""
         department = Department() if id is None else Department.query.get(id)
         response_code = 200
         if not department:
@@ -88,6 +106,7 @@ def create_app():
 
     @app.route("/employees")
     def employees():
+        """Displays employees list possibly filtered by birth date."""
         from_date = request.args.get("from_date", default=None)
         to_date = request.args.get("to_date", default=None)
         employees = Employee.query.all()
@@ -101,6 +120,7 @@ def create_app():
 
     @app.route("/employees/<int:id>")
     def view_employee(id):
+        """Displays employee."""
         employee = Employee.query.get(id)
         if not employee:
             return "Employee not found", 404
@@ -108,6 +128,7 @@ def create_app():
 
     @app.route("/employees/<int:id>/delete", methods=["GET","POST"])
     def delete_employee(id):
+        """Deletes employee"""
         employee = Employee.query.get(id)
         if not employee:
             return "Employee not found", 404
@@ -127,6 +148,7 @@ def create_app():
     @app.route("/employees/new/edit", methods=["GET", "POST"])
     @app.route("/employees/<int:id>/edit", methods=["GET", "POST"])
     def edit_employee(id=None):
+        """Displays and processes edit employee form for new or existing employee."""
         employee = Employee() if id is None else Employee.query.get(id)
         departments = Department.query.all()
         today = date.today().isoformat()
@@ -151,10 +173,12 @@ def create_app():
         
     @app.route("/api")
     def api():
+        """Returns links to supported root endpoints."""
         return jsonify({"links":{"departments":"/api/departments", "employees":"/api/employees"}})
     
-    @app.route("/api/departments")
+    @app.route("/api/departments", methods=["GET"])
     def departments_api():
+        """Returns a listing of all departments."""
         departments = Department.query.all()
         departments.sort(key=lambda x: x.average_monthly_salary if x.average_monthly_salary else -1, reverse=True)
         result = []
@@ -165,6 +189,7 @@ def create_app():
     
     @app.route("/api/departments/<int:id>")
     def view_department_api(id):
+        """Returns a single department record."""
         department = Department.query.get(id)
         if not department:
             return jsonify({"error":"Department not found"}), 404
@@ -174,6 +199,7 @@ def create_app():
     @app.route("/api/departments/<int:id>", methods=["PUT"])
     @app.route("/api/departments", methods=["POST"])
     def edit_department_api(id=None):
+        """Creates or modifies department record based on client request."""
         department = Department() if id is None else Department.query.get(id)
         if not department:
             return jsonify({"error":"Department not found"}), 404
@@ -191,9 +217,26 @@ def create_app():
         except:
             db.session.rollback()
             return jsonify({"error":"Database insertion failed!"}), 400
+    
+    @app.route("/api/departments/<int:id>", methods=["DELETE"])
+    def delete_department_api(id):
+        """Deletes department record based by the given id."""
+        department = Department.query.get(id)
+        if not department:
+            return jsonify({"error":"Department not found"}), 404
+        try:
+            for employee in department.employees:
+                db.session.delete(employee)
+            db.session.delete(department)
+            db.session.commit()
+            return jsonify({})
+        except:
+            db.session.rollback()
+            return jsonify({"error":"Department record not deleted!"}), 400
 
     @app.route("/api/employees")
     def employees_api():
+        """Returns a listing of all employees."""
         employees = Employee.query.all()
         employees.sort(key=lambda x: x.full_name)
         result = []
@@ -205,6 +248,7 @@ def create_app():
 
     @app.route("/api/employees/<int:id>")
     def view_employee_api(id):
+        """Returns a single employee record."""
         employee = Employee.query.get(id)
         if not employee:
             return jsonify({"error":"Employee not found"}), 404
@@ -215,6 +259,7 @@ def create_app():
     @app.route("/api/employees/<int:id>", methods=["PUT"])
     @app.route("/api/employees", methods=["POST"])
     def edit_employee_api(id=None):
+        """Creates or modifies employee record based on client request."""
         employee = Employee() if id is None else Employee.query.get(id)
         if not employee:
             return jsonify({"error":"Employee not found"}), 404
@@ -236,6 +281,7 @@ def create_app():
 
     @app.route("/api/employees/<int:id>", methods=["DELETE"])
     def delete_employee_api(id):
+        """Deletes employee record based by the given id."""
         employee = Employee.query.get(id)
         if not employee:
             return jsonify({"error":"Employee not found"}), 404
@@ -246,20 +292,5 @@ def create_app():
         except:
             db.session.rollback()
             return jsonify({"error":"Employee record not deleted!"}), 400
-
-    @app.route("/api/departments/<int:id>", methods=["DELETE"])
-    def delete_department_api(id):
-        department = Department.query.get(id)
-        if not department:
-            return jsonify({"error":"Department not found"}), 404
-        try:
-            for employee in department.employees:
-                db.session.delete(employee)
-            db.session.delete(department)
-            db.session.commit()
-            return jsonify({})
-        except:
-            db.session.rollback()
-            return jsonify({"error":"Department record not deleted!"}), 400
 
     return app 

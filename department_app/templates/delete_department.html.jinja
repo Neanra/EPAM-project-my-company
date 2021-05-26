@@ -2,13 +2,13 @@
 {% block title %}Confirmation page{% endblock %}
 {% block body %}
 <h3 style="color:darkred;">Are you sure you want to delete {{ department.name }} department? <br/>
-{%if department.employees|length > 0 %}
-    {%if department.employees|length == 1 %}
-    This will remove 1 employee currently in this department!
-    {% else %}
-    This will remove all {{ department.employees|length }} employees currently in this department!
+    {%if department.employees|length > 0 %}
+        {%if department.employees|length == 1 %}
+        This will remove 1 employee currently in this department!
+        {% else %}
+        This will remove all {{ department.employees|length }} employees currently in this department!
+        {% endif %}
     {% endif %}
-{% endif %}
 </h3>
 <br/>
 <form method="POST">
