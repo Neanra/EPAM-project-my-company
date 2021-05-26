@@ -16,7 +16,7 @@ The application should provide:
 ## 1.Departments
 ### 1.1 Display the list of departments
 The mode is designed to view the list of departments.
-![departments](./pictures/departments_list.png)
+![departments](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/departments_list.png)
 Main scenario:
 + User selects item “Departments”;
 + Application displays the list of departments.
@@ -28,7 +28,7 @@ The list displays the following columns:
 
 ### 1.2 Display deprtment
 The mode is designed to view a certain department.
-![department](./pictures/department.png)
+![department](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/department.png)
 Main scenario:
 + User clicks the link on a certain department in the departments list view mode;
 + Application dispalys page with an information on a certain department.
@@ -40,7 +40,7 @@ The page displays the following information:
 + List of the employees working in this department with their name (link on the employee display page), date of bith and salary
 
 ### 1.3 Add department
-![add department](./pictures/add_department.png)
+![add department](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/add_department.png)
 Main scenario:
 + User clicks the “Add department” button in the departments list view mode;
 + Application displays form to enter department data;
@@ -61,7 +61,7 @@ When adding a department, the following details are entered:
 + Name
 
 ### 1.4 Edit department
-![edit department](./pictures/edit_department.png)
+![edit department](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/edit_department.png)
 Main scenario:
 + User clicks the “Edit department” button in the department display mode;
 + Application displays the form to enter department data prefilled with actual data;
@@ -82,7 +82,7 @@ When editing a department, the following details are entered:
 + Name
 
 ### 1.5 Remove department
-![remove department](./pictures/remove_department.png)
+![remove department](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/remove_department.png)
 Main scenario:
 + User clicks the “Delete department” button in the department display mode;
 + A confirmation page is displayed;
@@ -101,7 +101,7 @@ Cancel operation scenario:
 ## 2 Employees
 ### 2.1 Display the list of employees
 The mode is designed to view the list of departments.
-![employees](./pictures/employees_list.png)
+![employees](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/employees_list.png)
 Main scenario:
 + User selects an item “Employees”;
 + Application displays the list of employees.
@@ -114,7 +114,7 @@ The list displays the following columns:
 
 ### 1.2 Display employee
 The mode is designed to view a certain employee.
-![employee](./pictures/employee.png)
+![employee](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/employee.png)
 Main scenario:
 + User clicks the link on a certain employee in the employees list view mode;
 + Application dispalys page with an information on a certain employee.
@@ -126,7 +126,7 @@ The page displays the following information:
 + Department (link to the department display page)
 
 ### 1.3 Add employee
-![add employee](./pictures/add_employee.png)
+![add employee](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/add_employee.png)
 Main scenario:
 + User clicks the “Add new employee record” button in the employees list view mode;
 + Application displays form to enter employee data;
@@ -151,7 +151,7 @@ When adding an employee, the following details are entered:
 + Department
 
 ### 1.4 Edit employee
-![edit employee](./pictures/edit_employee.png)
+![edit employee](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/edit_employee.png)
 Main scenario:
 + User clicks the “Edit employee record” button in the employee view mode;
 + Application displays the form to enter employee data prefilled with actual data;
@@ -176,7 +176,7 @@ When editing an employee, the following details are entered:
 + Department
 
 ### 1.5 Remove employee
-![remove employee](./pictures/remove_employee.png)
+![remove employee](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/remove_employee.png)
 Main scenario:
 + User clicks the “Delete employee record” button in the employee display mode;
 + A confirmation page is displayed;
@@ -195,7 +195,7 @@ Cancel operation scenario:
 ## 3 Search
 ### 3.1 Search employees by birth date
 The mode is designed to search employees by birth date.
-![search](./pictures/search.png)
+![search](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/search.png)
 Main scenario:
 + User selects an item “Search”;
 + Application displays the form to enter two dates that define the time frame;
