@@ -17,6 +17,7 @@ The application should provide:
 ### 1.1 Display the list of departments
 The mode is designed to view the list of departments.
 ![departments](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/departments_list.png)
+
 Main scenario:
 + User selects item “Departments”;
 + Application displays the list of departments.
@@ -29,6 +30,7 @@ The list displays the following columns:
 ### 1.2 Display deprtment
 The mode is designed to view a certain department.
 ![department](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/department.png)
+
 Main scenario:
 + User clicks the link on a certain department in the departments list view mode;
 + Application dispalys page with an information on a certain department.
@@ -41,6 +43,7 @@ The page displays the following information:
 
 ### 1.3 Add department
 ![add department](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/add_department.png)
+
 Main scenario:
 + User clicks the “Add department” button in the departments list view mode;
 + Application displays form to enter department data;
@@ -62,6 +65,7 @@ When adding a department, the following details are entered:
 
 ### 1.4 Edit department
 ![edit department](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/edit_department.png)
+
 Main scenario:
 + User clicks the “Edit department” button in the department display mode;
 + Application displays the form to enter department data prefilled with actual data;
@@ -83,6 +87,7 @@ When editing a department, the following details are entered:
 
 ### 1.5 Remove department
 ![remove department](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/remove_department.png)
+
 Main scenario:
 + User clicks the “Delete department” button in the department display mode;
 + A confirmation page is displayed;
@@ -102,6 +107,7 @@ Cancel operation scenario:
 ### 2.1 Display the list of employees
 The mode is designed to view the list of departments.
 ![employees](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/employees_list.png)
+
 Main scenario:
 + User selects an item “Employees”;
 + Application displays the list of employees.
@@ -115,6 +121,7 @@ The list displays the following columns:
 ### 1.2 Display employee
 The mode is designed to view a certain employee.
 ![employee](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/employee.png)
+
 Main scenario:
 + User clicks the link on a certain employee in the employees list view mode;
 + Application dispalys page with an information on a certain employee.
@@ -127,6 +134,7 @@ The page displays the following information:
 
 ### 1.3 Add employee
 ![add employee](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/add_employee.png)
+
 Main scenario:
 + User clicks the “Add new employee record” button in the employees list view mode;
 + Application displays form to enter employee data;
@@ -152,6 +160,7 @@ When adding an employee, the following details are entered:
 
 ### 1.4 Edit employee
 ![edit employee](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/edit_employee.png)
+
 Main scenario:
 + User clicks the “Edit employee record” button in the employee view mode;
 + Application displays the form to enter employee data prefilled with actual data;
@@ -177,6 +186,7 @@ When editing an employee, the following details are entered:
 
 ### 1.5 Remove employee
 ![remove employee](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/remove_employee.png)
+
 Main scenario:
 + User clicks the “Delete employee record” button in the employee display mode;
 + A confirmation page is displayed;
@@ -196,6 +206,7 @@ Cancel operation scenario:
 ### 3.1 Search employees by birth date
 The mode is designed to search employees by birth date.
 ![search](https://raw.githubusercontent.com/Neanra/EPAM-project-my-company/master/documentation/pictures/search.png)
+
 Main scenario:
 + User selects an item “Search”;
 + Application displays the form to enter two dates that define the time frame;
