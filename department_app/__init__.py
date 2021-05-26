@@ -1,5 +1,5 @@
 from decimal import Decimal
-from flask import Flask, render_template, request, abort, redirect, flash
+from flask import Flask, render_template, request, abort, redirect, flash, jsonify
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from datetime import date
@@ -148,5 +148,47 @@ def create_app():
                 response_code = 400
         return render_template("edit_employee.html.jinja", employee=employee, 
                             departments=departments, today=today, form=employee.to_dict()), response_code
+        
+    @app.route("/api")
+    def api():
+        return jsonify({"links":{"departments":"/api/departments", "employees":"/api/employees"}})
+    
+    @app.route("/api/departments")
+    def departments_api():
+        departments = Department.query.all()
+        departments.sort(key=lambda x: x.average_monthly_salary if x.average_monthly_salary else -1, reverse=True)
+        result = []
+        for department in departments:
+            result.append({"content": department.to_api_dict(), 
+                           "links": {"self": "/api/departments/{}".format(department.id)}})
+        return jsonify(result)
+    
+    @app.route("/api/departments/<int:id>")
+    def view_department_api(id):
+        department = Department.query.get(id)
+        if not department:
+            return jsonify({"error":"Department not found"}), 404
+        return jsonify({"content": department.to_api_dict(), 
+                        "links": {"self": "/api/departments/{}".format(department.id)}})
+
+    @app.route("/api/employees")
+    def employees_api():
+        employees = Employee.query.all()
+        employees.sort(key=lambda x: x.full_name)
+        result = []
+        for employee in employees:
+            result.append({"content": employee.to_api_dict(),
+                           "links": {"self": "/api/employees/{}".format(employee.id),
+                                     "department": "/api/departments/{}".format(employee.department_id)}})
+        return jsonify(result)
+
+    @app.route("/api/employees/<int:id>")
+    def view_employee_api(id):
+        employee = Employee.query.get(id)
+        if not employee:
+            return jsonify({"error":"Employee not found"}), 404
+        return jsonify({"content": employee.to_api_dict(),
+                        "links": {"self": "/api/employees/{}".format(employee.id),
+                                  "department": "/api/departments/{}".format(employee.department_id)}})
 
     return app 

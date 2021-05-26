@@ -1,5 +1,7 @@
 {% extends "base.html.jinja" %}
-{% block title %}Edit {{ employee.name }} record{% endblock %}
+{% block title %}
+    {% if employee.id %}Edit {{ employee.full_name }} record{% else %}Add employee record{% endif %}
+{% endblock %}
 {% block body %}
 <form method="POST">
     <label for="first_name">First name:</label><br/>

@@ -21,6 +21,7 @@
 <br/><br/><br/>
 
 {% set employees = department.employees %}
+{% if employees != [] %}
 <table> 
     <tr>
         <th colspan="3">Employees in {{ department.name }} department</th>
@@ -36,5 +37,6 @@
     </tr>
     {% endfor %}
 </table>
+{% endif %}
 {% endblock %}
 

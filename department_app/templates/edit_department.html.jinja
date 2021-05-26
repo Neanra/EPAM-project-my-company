@@ -1,5 +1,5 @@
 {% extends "base.html.jinja" %}
-{% block title %}Edit {{ department.name }} department{% endblock %}
+{% block title %}{% if department.id %}Edit {{ department.name }} department{% else %}Add department{% endif %}{% endblock %}
 {% block body %}
  <form method="POST">
   <label for="name">Department name:</label><br/>

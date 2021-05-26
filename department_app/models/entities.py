@@ -24,6 +24,12 @@ class Department(db.Model):
     def to_dict(self):
         return {'id': str(self.id), 'name': self.name if self.name else ''}
 
+    def to_api_dict(self):
+        return {'id': self.id, 'name': self.name if self.name else '', 
+                'average_monthly_salary': float(self.average_monthly_salary) if self.average_monthly_salary
+                                            else None,
+                'employees_count': self.employees_count}
+
     def populate_from_dict(self, d):
         if len(d['name']) < 1:
             raise ValueError("Name must not be empty")
@@ -51,8 +57,15 @@ class Employee(db.Model):
                 'monthly_salary': str(self.monthly_salary) if self.monthly_salary is not None else '',
                 'department_id': str(self.department_id) if self.department_id is not None else ''}
 
-    def populate_from_dict(self, d):
+    def to_api_dict(self):
+        return {'id': self.id, 
+                'first_name': self.first_name, 
+                'last_name': self.last_name,
+                'date_of_birth': self.date_of_birth.isoformat() if self.date_of_birth else None, 
+                'monthly_salary': float(self.monthly_salary) if self.monthly_salary is not None else None,
+                'department_id': self.department_id}
 
+    def populate_from_dict(self, d):
         if 'first_name' in d and len(d['first_name']) < 1:
             raise ValueError("First name must not be empty")
         if 'last_name' in d and len(d['last_name']) < 1:
