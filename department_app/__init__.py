@@ -17,7 +17,7 @@ db = SQLAlchemy()
 
 from .models.entities import Department, Employee
 
-def create_app():
+def create_app(is_testing=False):
     """
     Initializes and returns flask application instance for department app.
     
@@ -25,7 +25,10 @@ def create_app():
     """
     app = Flask(__name__)
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://department_app:sleep42@localhost/department_app"
+    if is_testing:
+        app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite://"
+    else:
+        app.config["SQLALCHEMY_DATABASE_URI"] = "mysql://department_app:sleep42@localhost/department_app"
     app.config["SECRET_KEY"] = "g5g5h4jytj65j56j"
     bootstrap.init_app(app)
     db.init_app(app)
